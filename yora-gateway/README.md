@@ -48,4 +48,5 @@ Oracle query as seen from YugabyteDB
 --------------------------------------------------------------------------------
 SELECT A1."query" FROM "pg_stat_activity" A1
 ```
-
+This is what it looks like with the logs of `yora-gateway` and the query from `sqlplus`
+![screenshot](https://user-images.githubusercontent.com/33070466/181782294-abd58ba4-ab5f-4e43-9db6-78aa5973f2e9.png)
