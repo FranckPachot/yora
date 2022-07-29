@@ -1,11 +1,11 @@
 FROM centos:7
 USER root
+ENV ORACLE_HOME /opt/oracle/product/18c/dbhomeXE
 COPY install-oracle.sh                      /opt/install-oracle.sh
 RUN sh /opt/install-oracle.sh
 COPY install-pgodbc.sh                      /opt/install-pgodbc.sh
 RUN sh /opt/install-pgodbc.sh
 USER oracle
-ENV ORACLE_HOME /opt/oracle/product/18c/dbhomeXE
 COPY initYORA.ora                           $ORACLE_HOME/hs/admin
 COPY listener.ora                           $ORACLE_HOME/network/admin
 COPY tnsnames.ora                           $ORACLE_HOME/network/admin
