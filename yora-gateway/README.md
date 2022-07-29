@@ -23,6 +23,8 @@ In an Oracle Database, you can create a database link as:
 create public database link "yb" connect to "yugabyte" identified by "yugabyte" using '(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=172.17.0.2)(PORT=1520))(CONNECT_DATA=(SID=YORA))(HS=OK))';
 ```
 
+### Example
+
 If you want to test, you can:
 - create a YugabyteDB database on Yugabyte Cloud
 - start an Oracle XE with:
