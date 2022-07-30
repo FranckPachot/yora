@@ -11,11 +11,11 @@ docker build -t pachot/yora-gateway .
 Run with:
 ```
 docker run -d --name yora-gateway -p 1520:1520   \
- -e PGHOST=yb1.pachot.net -e PGDATABASE=yugabyte \
+ -e PGHOST=yb1.pachot.net -e PGDATABASE=yugabyte -e PGAPPNAME=yora_gateway \
  pachot/yora-gateway
 
 docker inspect yora-gateway \
- --format '{{ .NetworkSettings.IPAddress }}')
+ --format '{{ .NetworkSettings.IPAddress }}'
 ```
 This listens on port 1520 for a service 'YORA' and connects to the PostgreSQL (or YugabyteDB) defined by PG environment variables PGHOST and PGPORT. I display the IP address to be used in the connection string for the DB Link if I start Oracle from another container, but you probably used the port exposed to the docker host because Oracle Database is not very container friendly.
 
@@ -69,9 +69,11 @@ This is what it looks like with the logs of `yora-gateway` and the query from `s
 
 - The PostgreSQL __user__ and __password__ are passed from the Oracle Database Link `connect to` and `identified by`
 - The PostgreSQL __server__ and __port__ are passed in the gateway environment with `PGHOST` and `PGPORT`
+- other LibPQ environement variables can be passed, like PGAPPNAME to identify the sessions
 - the __SSL mode__ is passed in `odbc.ini` because PGSSLMODE is ignored (see Issue #1). If you need certificates, you can mount a volume to `/home/oracle` with a custom `.odbc.ini` and certificates
 - the gateway exposes port 1520 (this is defined in `listener.ora`) and listens for service YORA
 - the Oracle database connects to it though the `using` connection string which contains `(HOST=)(PORT=)` to address it, `(SID=YORA)` for the service, and `(HS=OK)` as the target is not an Oracle Database (Heterogenous Service)
+- additional parameters can be passed in `initYORA-ora` according to [Oracle Gateway documentation](https://docs.oracle.com/en/database/oracle/oracle-database/18/odbcu/database-gateway-odbc-initialization-parameters.html#GUID-91C9D84C-7B7D-483C-8A0A-4CADC17FC8DB).
 
 
 
