@@ -11,7 +11,7 @@ docker build -t pachot/yora-gateway .
 Run with:
 ```
 docker run -d --name yora-gateway -p 1520:1520 --hostname yora-gateway \
- -e PGHOST=yb1.pachot.net -e PGDATABASE=yugabyte -e PGAPPNAME=yora_gateway \
+ -e PGHOST=yb1.pachot.net -e PGDATABASE=yugabyte -e PGAPPNAME=yora-gateway \
  pachot/yora-gateway
 
 docker inspect yora-gateway \

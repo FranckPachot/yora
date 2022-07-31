@@ -1,1 +1,2 @@
+# this is an example, as you probably don't connect from the gateway container
 YORA=(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1520))(CONNECT_DATA=(SID=YORA))(HS=OK))
