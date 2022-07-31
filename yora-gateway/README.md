@@ -10,7 +10,7 @@ docker build -t pachot/yora-gateway .
 ```
 Run with:
 ```
-docker run -d --name yora-gateway -p 1520:1520   \
+docker run -d --name yora-gateway -p 1520:1520 --hostname yora-gateway \
  -e PGHOST=yb1.pachot.net -e PGDATABASE=yugabyte -e PGAPPNAME=yora_gateway \
  pachot/yora-gateway
 
@@ -33,9 +33,9 @@ Note that you will see `Instance "YORA", status UNKNOWN` which is expected becau
 
 In an Oracle Database, you can create a database link as:
 ```
-create public database link "yb" connect to "yugabyte" identified by "yugabyte" using '(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=172.17.0.2)(PORT=1520))(CONNECT_DATA=(SID=YORA))(HS=OK))';
+create public database link "yb" connect to "yugabyte" identified by "yugabyte" using '(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=yora-gateway)(PORT=1520))(CONNECT_DATA=(SID=YORA))(HS=OK))';
 ```
-Here `172.17.0.2` is the host where the port 1520 is exposed, either the container if you run Oracle in a ontainer on the same docker network, or the host where the port is exposed with `-p 1520:1521`
+Here `yora-gateway` is the host where the port 1520 is exposed, either the container if you run Oracle in a container on the same docker network, or the host where the port is exposed with `-p 1520:1521`
 
 
 ### Example
@@ -44,12 +44,12 @@ If you want to test, you can:
 - create a YugabyteDB database in a container or on Yugabyte Cloud
 - start an Oracle XE and create a database link:
 ```
-docker run -d --name xe -p 1521:1521 -e ORACLE_PASSWORD=manager gvenzl/oracle-xe:slim
+docker run -d --name xe -p 1521:1521 --link yora-gateway -e ORACLE_PASSWORD=manager gvenzl/oracle-xe:slim
 until docker logs xe | grep "Completed" ; do sleep 1 ; done
 #
 docker exec -i xe sqlplus system/manager @ /dev/stdin <<'SQL'
 set echo on
-create public database link "yb" connect to "yugabyte" identified by "yugabyte" using '(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=172.17.0.2)(PORT=1520))(CONNECT_DATA=(SID=YORA))(HS=OK))';
+create public database link "yb" connect to "yugabyte" identified by "yugabyte" using '(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=yora-gateway)(PORT=1520))(CONNECT_DATA=(SID=YORA))(HS=OK))';
 select "query" as "Oracle query as seen from YugabyteDB" from "pg_stat_activity"@"yb";
 SQL
 #
