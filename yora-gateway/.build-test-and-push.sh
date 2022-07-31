@@ -18,4 +18,4 @@ SQL
 } || exit
 echo "All works"
 docker build --squash -t pachot/yora-gateway . || exit
-docker push pachot/yora-gateway . || exit
+docker push pachot/yora-gateway || exit
